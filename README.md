@@ -37,6 +37,6 @@ Projeyi çalıştırmanın en kolay ve önerilen yolu proje ana dizinindeki baş
 - `data/`: 8 Ege iline ait okullar, hastaneler, eczaneler, diri fay hatları, depremler, yollar vb. coğrafi verilerin bulunduğu dizin (.js ve .json).
 
 ## Geliştirici
-Bu sistem **Rainbow.dev** tarafından klavyeye dökülmüştür. 🚀
+Bu sistem **Rainbow.dev** tarafından yapılmıştır.
 
-Daha fazla proje, geri bildirim veya iletişim için https://rainbowdev.com.tr adresine göz atabilirsiniz.
+Daha fazla proje, geri bildirim veya iletişim için https://www.rainbowdev.com.tr adresine göz atabilirsiniz.
