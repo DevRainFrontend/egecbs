@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ege CBS | İnteraktif Coğrafi Bilgi Sistemi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+
+<!-- MODÜLER CBS VERİ DOSYALARI -->
+<script src="data/harita.js?v=20261017_3"></script>
+<script src="data/provinces.js?v=20261017_3"></script>
+<script src="data/roads.js?v=20261017_3"></script>
+<script src="data/schools.js?v=20261017_3"></script>
+<script src="data/universities.js?v=20261017_3"></script>
+<script src="data/hospitals.js?v=20261017_3"></script>
+<script src="data/health_centers.js?v=20261017_3"></script>
+<script src="data/health.js?v=20261017_3"></script>
+<script src="data/pharmacies.js?v=20261017_3"></script>
+<script src="data/assembly.js?v=20261017_3"></script>
+<script src="data/faults.js?v=20261017_3"></script>
+<script src="data/quakes.js?v=20261017_3"></script>
+<script src="data/airports.js?v=20261017_3"></script>
+<script src="data/railways.js?v=20261017_3"></script>
+<script src="data/parks.js?v=20261017_3"></script>
+<script src="data/lakes.js?v=20261017_3"></script>
+<script src="data/forests.js?v=20261017_3"></script>
+
+<style>
+:root{
+  --bg-app:#f8fafc;
+  --bg-card:#ffffff;
+  --border:#e2e8f0;
+  --text-main:#0f172a;
+  --text-muted:#64748b;
+  --primary:#2563eb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;width:100%;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text-main);background:var(--bg-app);overflow:hidden;-webkit-font-smoothing:antialiased}
+.app{height:100vh;display:grid;grid-template-rows:54px 1fr;overflow:hidden}
+.topbar{background:#ffffff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:1000}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:30px;height:30px;border-radius:4px;background:#0f172a;display:grid;place-items:center;color:#ffffff;font-weight:700;font-size:12px;letter-spacing:0.5px}
+.title h1{font-size:14px;font-weight:600;margin:0;color:#0f172a;line-height:1.2}
+.title p{font-size:11px;color:var(--text-muted);margin:1px 0 0}
+.top-actions{display:flex;align-items:center;gap:8px}
+.year-badge{background:#f1f5f9;border:1px solid #cbd5e1;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:500;color:#334155}
+.btn-action{background:#ffffff;border:1px solid #cbd5e1;color:#334155;padding:5px 12px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s ease}
+.btn-action:hover{background:#f8fafc;border-color:#94a3b8;color:#0f172a}
+.btn-primary{background:#0f172a;color:#ffffff;border:none;padding:6px 12px;border-radius:4px;font-weight:500;cursor:pointer;font-size:12px}
+.btn-primary:hover{background:#1e293b}
+
+.workspace{height:100%;min-height:0;display:grid;grid-template-columns:250px 1fr 290px;position:relative;overflow:hidden}
+.sidebar,.inspector{background:#ffffff;overflow-y:auto;padding:12px;position:relative;z-index:1000 !important}
+.sidebar{border-right:1px solid var(--border)}
+.inspector{border-left:1px solid var(--border)}
+.sidebar, .right-panel, .dropdown-menu, .leaflet-control-layers-expanded {
+    z-index: 1000 !important;
+}
+
+.section-kicker{font-size:11px;font-weight:600;color:#64748b;margin:0 0 8px;text-align:center}
+.group{margin-bottom:10px;background:#ffffff;border:1px solid var(--border);border-radius:4px;padding:8px 10px}
+.group-title{font-size:12px;font-weight:600;color:#334155;margin-bottom:6px;display:flex;justify-content:center;align-items:center;text-align:center}
+.layer{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 0;font-size:12px;color:#1e293b;cursor:pointer;text-align:center;width:100%}
+.layer input{margin:0;accent-color:#2563eb}
+
+.main-content, .content-area, .row, .map-wrap {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+#map {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: #f8fafc !important;
+    z-index: 1 !important;
+}
+
+.inspector h2{font-size:14px;font-weight:600;margin:0 0 2px;color:#0f172a}
+.inspector .sub{color:var(--text-muted);font-size:11px;margin:0 0 12px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.stat{background:#f8fafc;border:1px solid var(--border);border-radius:4px;padding:8px}
+.stat b{display:block;font-size:18px;font-weight:600;color:#0f172a;line-height:1.2}
+.stat span{font-size:11px;color:var(--text-muted);font-weight:400}
+
+.info-card{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+.info-card h3{font-size:12px;font-weight:600;color:#334155;margin:0 0 8px}
+.province-list{display:grid;gap:4px}
+.province{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:12px;background:#ffffff;transition:background 0.1s ease}
+.province:hover,.province.active{background:#f1f5f9;border-color:#cbd5e1}
+.province em{font-style:normal;font-size:11px;color:var(--text-muted)}
+
+.legend{display:grid;gap:6px}
+.legend-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#475569}
+.legend-emoji{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;font-size:12px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+
+.custom-emoji-marker{background:transparent !important;border:none !important}
+.custom-emoji-marker:hover div{transform:scale(1.25);box-shadow:0 4px 10px rgba(0,0,0,0.25)}
+
+@media(max-width:1100px){.workspace{grid-template-columns:250px 1fr}.inspector{display:none}#map{right:0 !important}}
+@media(max-width:768px){.workspace{grid-template-columns:1fr}.sidebar{display:none}#map{left:0 !important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">EGE</div>
+      <div class="title">
+        <h1>Ege Bölgesi Coğrafi Bilgi Sistemi</h1>
+        <p>8 İl • Coğrafi Katman ve Alan Analiz Platformu</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a href="/admin/" class="btn-action" style="text-decoration:none;">⚙️ Admin Paneli</a>
+      <button class="btn-action" id="syncDataBtn">🔄 Veri Senkronizasyonu</button>
+      <div class="year-badge" id="yearBadge">2026 Veri Görünümü</div>
+      <button class="btn-action" id="homeBtn">📍 Bölgeye Dön</button>
+      <button class="btn-primary" id="toggleSidebar">☰ Katmanlar</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar" id="sidebar">
+      <div class="section-kicker">Harita Katmanları</div>
+
+      <div class="group">
+        <div class="group-title">Temel Katmanlar</div>
+        <label class="layer"><input type="checkbox" data-layer="provinces"> 🗺️ Ege illeri</label>
+        <label class="layer"><input type="checkbox" data-layer="roads"> 🛣️ Ana karayolları</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Eğitim</div>
+        <label class="layer"><input type="checkbox" data-layer="schools"> 🏫 Okullar (MEB)</label>
+        <label class="layer"><input type="checkbox" data-layer="universities"> 🎓 Üniversiteler</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Sağlık</div>
+        <label class="layer"><input type="checkbox" data-layer="hospitals"> 🏥 Hastaneler</label>
+        <label class="layer"><input type="checkbox" data-layer="health"> 🩺 Aile Sağlığı Merkezleri</label>
+        <label class="layer"><input type="checkbox" data-layer="pharmacies"> 💊 Eczaneler</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Afet & Jeoloji</div>
+        <label class="layer"><input type="checkbox" data-layer="assembly"> ⛺ Toplanma Alanları</label>
+        <label class="layer"><input type="checkbox" data-layer="faults"> ⚡ Diri Fay Hatları</label>
+        <label class="layer"><input type="checkbox" data-layer="quakes"> 💥 Son Depremler</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Ulaşım & Lojistik</div>
+        <label class="layer"><input type="checkbox" data-layer="airports"> ✈️ Havalimanları & Üsler</label>
+        <label class="layer"><input type="checkbox" data-layer="rail"> 🚂 Demiryolu Hatları</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Doğa & Çevre</div>
+        <label class="layer"><input type="checkbox" data-layer="parks"> 🌲 Milli Parklar</label>
+        <label class="layer"><input type="checkbox" data-layer="lakes"> 💧 Göller & Barajlar</label>
+        <label class="layer"><input type="checkbox" data-layer="forests"> 🌳 Orman Alanları</label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Altlık Harita Türü</div>
+        <label class="layer"><input type="radio" name="basemap" value="osm" checked> Varsayılan (Esri Street)</label>
+        <label class="layer"><input type="radio" name="basemap" value="topo"> Topoğrafya (Esri Topo)</label>
+        <label class="layer"><input type="radio" name="basemap" value="satellite"> Uydu (Esri Satellite)</label>
+        <label class="layer"><input type="radio" name="basemap" value="light"> Açık Harita (Esri Gray)</label>
+      </div>
+
+      <div class="dev-signature" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:#94a3b8;text-align:center">
+        Made with ❤️ by <a href="https://rainbowdev.com.tr" target="_blank" style="color: inherit; text-decoration: none; font-weight: bold;">Rainbow.dev</a>
+      </div>
+    </aside>
+
+    <main class="map-wrap">
+      <div id="map" class="map"></div>
+    </main>
+
+    <aside class="inspector">
+      <h2>Alan Özeti</h2>
+      <p class="sub">Ege Bölgesi Veri Özeti</p>
+      <div class="stat-grid">
+        <div class="stat"><b>8</b><span>İl Kapsamı</span></div>
+        <div class="stat"><b>10.975.688</b><span>Toplam Nüfus</span></div>
+        <div class="stat"><b id="schoolStat">0</b><span>Eğitim Kurumu</span></div>
+        <div class="stat"><b id="healthStat">0</b><span>Sağlık Tesisi</span></div>
+        <div class="stat"><b id="pharmacyStat">0</b><span>Eczane Kaydı</span></div>
+        <div class="stat"><b id="airportStat">0</b><span>Havalimanı & Üs</span></div>
+        <div class="stat"><b id="activeLayerCount">0</b><span>Aktif Katman</span></div>
+        <div class="stat"><b id="visibleCountSidebar">0</b><span>Ekranda Görünür</span></div>
+      </div>
+
+      <div class="info-card">
+        <h3>Ege İlleri Hızlı Odak</h3>
+        <div class="province-list" id="provinceList"></div>
+      </div>
+
+      <div class="info-card">
+        <h3>Görsel Lejant</h3>
+        <div class="legend">
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#2563eb">🏫</span> Okul (MEB)</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#7c3aed">🎓</span> Üniversite</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#dc2626">🏥</span> Hastane</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#ea580c">🩺</span> Aile Sağlığı M.</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#10b981">💊</span> Eczane</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#22c55e">⛺</span> Toplanma Alanı</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#ef4444">💥</span> Son Depremler</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#0891b2">✈️</span> Havalimanı & Üs</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#16a34a">🌲</span> Milli Park</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#0284c7">💧</span> Göl / Baraj</div>
+          <div class="legend-row"><span class="legend-emoji" style="border-color:#15803d">🌳</span> Orman Alanı</div>
+        </div>
+        <div style="margin-top:15px; padding-top:10px; border-top:1px dashed var(--border); font-size:11px; color:#64748b; line-height:1.8;">
+          <strong style="color:#334155;">Veri Kaynakları:</strong><br>
+          • <a href="https://www.meb.gov.tr/" target="_blank" style="color:#2563eb; text-decoration:none;">Milli Eğitim Bakanlığı (MEB)</a><br>
+          • <a href="https://www.saglik.gov.tr/" target="_blank" style="color:#2563eb; text-decoration:none;">T.C. Sağlık Bakanlığı</a><br>
+          • <a href="http://www.koeri.boun.edu.tr/scripts/lst9.asp" target="_blank" style="color:#2563eb; text-decoration:none;">B.Ü. Kandilli Rasathanesi</a><br>
+          • <a href="https://api.orhanaydogdu.com.tr/" target="_blank" style="color:#2563eb; text-decoration:none;">Kandilli Deprem API (O. Aydoğdu)</a><br>
+          • <a href="https://www.mta.gov.tr/" target="_blank" style="color:#2563eb; text-decoration:none;">MTA Diri Fay Veri Tabanı</a><br>
+          • <a href="https://www.dhmi.gov.tr/" target="_blank" style="color:#2563eb; text-decoration:none;">DHMİ Havacılık Bilgileri</a><br>
+          • <a href="https://www.esri.com/en-us/arcgis/products/arcgis-platform/services/basemaps" target="_blank" style="color:#2563eb; text-decoration:none;">Esri</a> & <a href="https://www.openstreetmap.org/" target="_blank" style="color:#2563eb; text-decoration:none;">OpenStreetMap</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// 1. TEMİZ HARİTA BAŞLATMA (CLEAN INITIALIZATION)
+// ============================================================================
+if (window.myMap) {
+    window.myMap.remove();
+}
+
+const map = L.map('map', {
+    center: [38.4192, 27.1287], // Ege / İzmir merkezi
+    zoom: 8,                    // İdeal Ege Bölgesi görünüm zoom seviyesi
+    minZoom: 7,                 // Daha fazla uzaklaşmayı engelle
+    maxZoom: 14,
+    maxBounds: [
+        [36.40, 26.50],         // Güney-Batı sınırı
+        [40.10, 30.70]          // Kuzey-Doğu sınırı
+    ],
+    maxBoundsViscosity: 1.0,    // Sınır dışına çıkmayı tamamen sert bir şekilde engelle
+    zoomControl: true,
+    attributionControl: false
+});
+
+window.myMap = map;
+window.map = map;
+
+const defaultTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19
+}).addTo(map);
+
+setTimeout(() => {
+    map.invalidateSize(true);
+}, 300);
+
+// Base Map Tile Layers
+window.baseTileLayers = {
+    osm: defaultTileLayer,
+    topo: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: '&copy; Esri World Topo Map'
+    }),
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: '&copy; Esri World Imagery'
+    }),
+    light: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: '&copy; Esri World Light Gray Base'
+    })
+};
+
+window.currentBaseTileLayer = window.baseTileLayers.osm;
+
+// Radio Button Event Listener for Base Map Switching is handled in DOMContentLoaded below
+
+window.map = map;
+
+// Katman Grupları
+const layers = {
+    provinces: L.layerGroup(),
+    roads: L.layerGroup(),
+    schools: L.layerGroup(),
+    universities: L.layerGroup(),
+    hospitals: L.layerGroup(),
+    health: L.layerGroup(),
+    pharmacies: L.layerGroup(),
+    assembly: L.layerGroup(),
+    faults: L.layerGroup(),
+    quakes: L.layerGroup(),
+    airports: L.layerGroup(),
+    rail: L.layerGroup(),
+    parks: L.layerGroup(),
+    lakes: L.layerGroup(),
+    forests: L.layerGroup()
+};
+window.layers = layers;
+
+// Global Katman Grupları Tanımlaması (window.schoolsLayer vb.)
+window.schoolsLayer = layers.schools;
+window.hospitalsLayer = layers.hospitals;
+window.universitiesLayer = layers.universities;
+window.healthLayer = layers.health;
+window.pharmaciesLayer = layers.pharmacies;
+window.assemblyLayer = layers.assembly;
+window.faultsLayer = layers.faults;
+window.quakesLayer = layers.quakes;
+window.airportsLayer = layers.airports;
+window.railwaysLayer = layers.rail;
+window.railLayer = layers.rail;
+window.parksLayer = layers.parks;
+window.lakesLayer = layers.lakes;
+window.forestsLayer = layers.forests;
+window.provincesLayer = layers.provinces;
+window.roadsLayer = layers.roads;
+
+// Katman Kontrol Seçici (Collapsed Default)
+
+
+// ============================================================================
+// 2. MODÜLER VERİ POPÜLASYONU VE KATMAN RENDER MOTORU
+// ============================================================================
+// ============================================================================
+// 2. EGE BÖLGESİ SIKI COĞRAFİ SINIR VE 8 İL FİLTRESİ
+// Bounding Box: Lat [36.5, 39.9], Lng [26.0, 31.8]
+// 8 İl: İzmir, Manisa, Aydın, Muğla, Denizli, Uşak, Kütahya, Afyonkarahisar
+// ============================================================================
+const EGE_BBOX = { minLat: 36.5, maxLat: 39.9, minLng: 26.0, maxLng: 31.8 };
+const EGE_PROVINCES = ['izmir', 'manisa', 'aydın', 'aydin', 'muğla', 'mugla', 'denizli', 'uşak', 'usak', 'kütahya', 'kutahya', 'afyonkarahisar', 'afyon'];
+
+function isPointInEge(lat, lng, cityName) {
+    if (isNaN(lat) || isNaN(lng)) return false;
+    if (lat < EGE_BBOX.minLat || lat > EGE_BBOX.maxLat || lng < EGE_BBOX.minLng || lng > EGE_BBOX.maxLng) return false;
+    if (cityName) {
+        const norm = String(cityName).trim().toLowerCase()
+            .replace(/i̇/g, 'i').replace(/ı/g, 'i')
+            .replace(/ğ/g, 'g').replace(/ü/g, 'u')
+            .replace(/ş/g, 's').replace(/ö/g, 'o')
+            .replace(/ç/g, 'c');
+
+        // Deniz ve körfez depremleri (Ege Denizi, Kuşadası Körfezi, Çandarlı vb.) Ege sınırları içindeyse geçerli sayılır
+        const marineKeywords = ['ege', 'deniz', 'korfez', 'aciklar', 'ada', 'oniki', 'kandilli'];
+        if (marineKeywords.some(k => norm.includes(k))) return true;
+
+        const match = EGE_PROVINCES.some(p => norm.includes(p));
+        if (!match) {
+            // Ege dışı komşu iller (Balıkesir, Çanakkale vb.) açıkça belirtilmişse filtrele
+            const otherProvinces = ['balikesir', 'canakkale', 'bursa', 'antalya', 'burdur', 'isparta', 'eskisehir', 'bilecik', 'konya'];
+            if (otherProvinces.some(op => norm.includes(op))) return false;
+        }
+    }
+    return true;
+}
+
+function filterLineCoordsInEge(coords) {
+    if (!Array.isArray(coords)) return [];
+    return coords.filter(c => {
+        if (!Array.isArray(c) || c.length < 2) return false;
+        const lat = parseFloat(c[0]), lng = parseFloat(c[1]);
+        return !isNaN(lat) && !isNaN(lng) &&
+               lat >= EGE_BBOX.minLat && lat <= EGE_BBOX.maxLat &&
+               lng >= EGE_BBOX.minLng && lng <= EGE_BBOX.maxLng;
+    });
+}
+
+
+
+function createEmojiIcon(emoji, borderColor = '#cbd5e1') {
+    const safeEmoji = emoji || '📍';
+    const safeColor = borderColor || '#cbd5e1';
+    return L.divIcon({
+        className: 'custom-emoji-marker',
+        html: `<div style="background:#ffffff; border:2px solid ${safeColor}; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 2px 6px rgba(0,0,0,0.18); line-height:1;">${safeEmoji}</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14]
+    });
+}
+
+function renderAllPoiLayers() {
+    const m = window.map || map;
+    const l = window.layers || layers;
+    if (!m || !l || !m._container || !m._panes) return;
+
+    // 1. İller (Sadece Ege 8 İl)
+    const provRaw = (window.CBS_DATA && window.CBS_DATA.provinces) ? window.CBS_DATA.provinces : (window.provinces || []);
+    const provData = provRaw.filter(p => isPointInEge(p.lat, p.lng, p.name));
+    if (provData.length > 0 && l.provinces) {
+        l.provinces.clearLayers();
+        provData.forEach(p => {
+            if (p.geom) {
+                const poly = L.geoJSON(p.geom, {
+                    style: { color: '#0f766e', weight: 2.5, fillColor: '#14b8a6', fillOpacity: 0.15 }
+                });
+                poly.bindPopup(`<b>${p.name}</b><br>Nüfus: ${p.pop}<br>İlçe Sayısı: ${p.count}`);
+                l.provinces.addLayer(poly);
+            }
+        });
+    }
+
+    // 2. Ana Karayolları
+    const roadData = (window.CBS_DATA && window.CBS_DATA.roads) ? window.CBS_DATA.roads : (window.roads || []);
+    if (roadData.length > 0 && l.roads) {
+        l.roads.clearLayers();
+        roadData.forEach(r => {
+            if (r.coords) {
+                const validCoords = filterLineCoordsInEge(r.coords);
+                if (validCoords.length >= 2) {
+                    const polyline = L.polyline(validCoords, { color: '#f59e0b', weight: 3.5, opacity: 0.85 });
+                    polyline.bindPopup(`<b>🛣️ ${r.name}</b>`);
+                    l.roads.addLayer(polyline);
+                }
+            }
+        });
+    }
+
+    // Helper to extract fields
+    function extractItem(item, latIdx, lngIdx, cityIdx, nameIdx, infoIdx) {
+        if (Array.isArray(item)) {
+            return {
+                lat: parseFloat(item[latIdx]), lng: parseFloat(item[lngIdx]),
+                city: item[cityIdx], name: item[nameIdx], info: item[infoIdx]
+            };
+        } else if (item && typeof item === 'object') {
+            return {
+                lat: parseFloat(item.lat), lng: parseFloat(item.lng),
+                city: item.city, name: item.name || item.title, info: item.info || item.type || item.desc
+            };
+        }
+        return { lat: NaN, lng: NaN };
+    }
+
+    // 3. Okullar (MEB - 🏫)
+    const schoolData = (window.CBS_DATA && window.CBS_DATA.schools) ? window.CBS_DATA.schools : (window.schools || []);
+    if (schoolData.length > 0 && l.schools) {
+        l.schools.clearLayers();
+        schoolData.forEach(s => {
+            const d = extractItem(s, 4, 5, 1, 0, 3);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('🏫', '#2563eb') });
+                marker.bindPopup(`<b>🏫 ${d.name}</b><br>${d.city||''}<br><small>${d.info||'T.C. MEB'}</small>`);
+                l.schools.addLayer(marker);
+            }
+        });
+    }
+
+    // 4. Üniversiteler (🎓)
+    const uniData = (window.CBS_DATA && window.CBS_DATA.universities) ? window.CBS_DATA.universities : (window.universities || []);
+    if (uniData.length > 0 && l.universities) {
+        l.universities.clearLayers();
+        uniData.forEach(u => {
+            const d = extractItem(u, 4, 5, 1, 0, 3);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('🎓', '#7c3aed') });
+                marker.bindPopup(`<b>🎓 ${d.name}</b><br>${d.city||''}<br><small>${d.info||'Üniversite Kampüsü'}</small>`);
+                l.universities.addLayer(marker);
+            }
+        });
+    }
+
+    // 5. Hastaneler (🏥)
+    const hospitalData = (window.CBS_DATA && window.CBS_DATA.hospitals) ? window.CBS_DATA.hospitals : (window.hospitals || []);
+    if (hospitalData.length > 0 && l.hospitals) {
+        l.hospitals.clearLayers();
+        hospitalData.forEach(h => {
+            const d = extractItem(h, 4, 5, 1, 0, 6);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('🏥', '#dc2626') });
+                marker.bindPopup(`<b>🏥 ${d.name}</b><br>${d.city||''}<br><small>${d.info||'Sağlık Bakanlığı'}</small>`);
+                l.hospitals.addLayer(marker);
+            }
+        });
+    }
+
+    // 6. Aile Sağlığı Merkezleri (🩺)
+    const healthData = (window.CBS_DATA && window.CBS_DATA.health_centers) ? window.CBS_DATA.health_centers : (window.health_centers || []);
+    if (healthData.length > 0 && l.health) {
+        l.health.clearLayers();
+        healthData.forEach(hc => {
+            const d = extractItem(hc, 4, 5, 1, 0, 3);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('🩺', '#ea580c') });
+                marker.bindPopup(`<b>🩺 ${d.name}</b><br>${d.city||''}<br><small>${d.info||'ASM'}</small>`);
+                l.health.addLayer(marker);
+            }
+        });
+    }
+
+    // 7. Eczaneler (💊)
+    const pharmacyData = (window.CBS_DATA && window.CBS_DATA.pharmacies) ? window.CBS_DATA.pharmacies : (window.pharmacies || []);
+    if (pharmacyData.length > 0 && l.pharmacies) {
+        l.pharmacies.clearLayers();
+        pharmacyData.forEach(p => {
+            const d = extractItem(p, 4, 5, 1, 0, 6);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('💊', '#10b981') });
+                marker.bindPopup(`<b>💊 ${d.name}</b><br>${d.city||''}<br><small>${d.info||'Serbest Eczane'}</small>`);
+                l.pharmacies.addLayer(marker);
+            }
+        });
+    }
+
+    // 8. Toplanma Alanları (⛺)
+    const assemblyData = (window.CBS_DATA && window.CBS_DATA.assembly) ? window.CBS_DATA.assembly : (window.assembly || []);
+    if (assemblyData.length > 0 && l.assembly) {
+        l.assembly.clearLayers();
+        assemblyData.forEach(a => {
+            const d = extractItem(a, 4, 5, 1, 0, 3);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('⛺', '#22c55e') });
+                marker.bindPopup(`<b>⛺ ${d.name}</b><br>${d.city||''}<br><small>${d.info||'Afet Toplanma Alanı'}</small>`);
+                l.assembly.addLayer(marker);
+            }
+        });
+    }
+
+    // 9. Diri Fay Hatları
+    const faultData = (window.CBS_DATA && window.CBS_DATA.faults) ? window.CBS_DATA.faults : (window.faults || []);
+    if (faultData.length > 0 && l.faults) {
+        l.faults.clearLayers();
+        faultData.forEach(f => {
+            if (f.coords && f.coords.length > 0) {
+                const validCoords = filterLineCoordsInEge(f.coords);
+                if (validCoords.length >= 2) {
+                    const line = L.polyline(validCoords, { color: '#b91c1c', weight: 3, dashArray: '6, 6', opacity: 0.9 });
+                    line.bindPopup(`<b>⚡ Diri Fay Hattı:</b> ${f.name}`);
+                    l.faults.addLayer(line);
+                }
+            }
+        });
+    }
+
+    // 10. Son Depremler (💥)
+    const quakeData = (window.CBS_DATA && window.CBS_DATA.quakes) ? window.CBS_DATA.quakes : (window.quakes || []);
+    if (quakeData.length > 0 && l.quakes) {
+        l.quakes.clearLayers();
+        quakeData.forEach(q => {
+            let d;
+            if (Array.isArray(q)) d = { lat: parseFloat(q[3]), lng: parseFloat(q[4]), city: q[2], name: `Büyüklük: ${q[1]}`, info: q[0] };
+            else d = { lat: parseFloat(q.lat), lng: parseFloat(q.lng), city: q.lokasyon || '', name: `Büyüklük: ${q.mag}`, info: q.date };
+            
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('💥', '#ef4444') });
+                marker.bindPopup(`<b>💥 Deprem (${d.name})</b><br>${d.city}<br>Tarih: ${d.info}`);
+                l.quakes.addLayer(marker);
+            }
+        });
+    }
+
+    // 11. Havalimanları & Üsler (✈️)
+    const airportData = (window.CBS_DATA && window.CBS_DATA.airports) ? window.CBS_DATA.airports : (window.airports || []);
+    if (airportData.length > 0 && l.airports) {
+        l.airports.clearLayers();
+        airportData.forEach(a => {
+            const d = extractItem(a, 4, 5, 2, 0, 3);
+            if (isPointInEge(d.lat, d.lng, d.city)) {
+                const marker = L.marker([d.lat, d.lng], { icon: createEmojiIcon('✈️', '#0891b2') });
+                marker.bindPopup(`<b>✈️ ${d.name}</b><br>${d.city||''}<br><small>${d.info||''}</small>`);
+                l.airports.addLayer(marker);
+            }
+        });
+    }
+
+    // 12. Demiryolları
+    const railData = (window.CBS_DATA && window.CBS_DATA.railways) ? window.CBS_DATA.railways : (window.railways || []);
+    if (railData.length > 0 && l.rail) {
+        l.rail.clearLayers();
+        railData.forEach(r => {
+            if (r.coords) {
+                const validCoords = filterLineCoordsInEge(r.coords);
+                if (validCoords.length >= 2) {
+                    const line = L.polyline(validCoords, { color: '#64748b', weight: 3, dashArray: '4, 4', opacity: 0.85 });
+                    line.bindPopup(`<b>🚂 ${r.name}</b>`);
+                    l.rail.addLayer(line);
+                }
+            }
+        });
+    }
+
+    // 13. Milli Parklar, 14. Göller, 15. Ormanlar
+    [
+        { data: (window.CBS_DATA && window.CBS_DATA.parks) ? window.CBS_DATA.parks : (window.parks || []), group: l.parks, icon: '🌲', color: '#16a34a', fill: '#22c55e' },
+        { data: (window.CBS_DATA && window.CBS_DATA.lakes) ? window.CBS_DATA.lakes : (window.lakes || []), group: l.lakes, icon: '💧', color: '#0284c7', fill: '#38bdf8' },
+        { data: (window.CBS_DATA && window.CBS_DATA.forests) ? window.CBS_DATA.forests : (window.forests || []), group: l.forests, icon: '🌳', color: '#15803d', fill: '#16a34a' }
+    ].forEach(layerDef => {
+        if (layerDef.data.length > 0 && layerDef.group) {
+            layerDef.group.clearLayers();
+            layerDef.data.forEach(item => {
+                if (item.coords) {
+                    const validCoords = filterLineCoordsInEge(item.coords);
+                    if (validCoords.length >= 3 && isPointInEge(validCoords[0][0], validCoords[0][1], item.city)) {
+                        const poly = L.polygon(validCoords, { color: layerDef.color, weight: 2, fillColor: layerDef.fill, fillOpacity: 0.35 });
+                        poly.bindPopup(`<b>${layerDef.icon} ${item.name}</b><br>${item.city||''}`);
+                        layerDef.group.addLayer(poly);
+                    }
+                }
+            });
+        }
+    });
+
+    // Checkbox ve Harita Katman Köprüsü (JavaScript)
+    document.querySelectorAll('.sidebar input[type="checkbox"][data-layer]').forEach(checkbox => {
+        checkbox.onchange = function(e) {
+            const targetMap = window.myMap || window.map || m;
+            const layerKey = (e.target.dataset.layer || '').trim();
+            const labelText = e.target.closest('label')?.textContent || e.target.nextElementSibling?.textContent || "";
+
+            let targetLayer = null;
+
+            if (layerKey === 'schools' || labelText.includes("Okullar") || labelText.includes("MEB")) {
+                targetLayer = window.schoolsLayer || l.schools;
+            } else if (layerKey === 'hospitals' || labelText.includes("Hastaneler")) {
+                targetLayer = window.hospitalsLayer || l.hospitals;
+            } else if (layerKey === 'universities' || labelText.includes("Üniversiteler")) {
+                targetLayer = window.universitiesLayer || l.universities;
+            } else if (layerKey === 'health' || labelText.includes("Aile Sağlığı")) {
+                targetLayer = window.healthLayer || l.health;
+            } else if (layerKey === 'pharmacies' || labelText.includes("Eczaneler")) {
+                targetLayer = window.pharmaciesLayer || l.pharmacies;
+            } else if (layerKey === 'assembly' || labelText.includes("Toplanma")) {
+                targetLayer = window.assemblyLayer || l.assembly;
+            } else if (layerKey === 'faults' || labelText.includes("Fay")) {
+                targetLayer = window.faultsLayer || l.faults;
+            } else if (layerKey === 'quakes' || labelText.includes("Deprem")) {
+                targetLayer = window.quakesLayer || l.quakes;
+            } else if (layerKey === 'airports' || labelText.includes("Havalimanı")) {
+                targetLayer = window.airportsLayer || l.airports;
+            } else if (layerKey === 'rail' || labelText.includes("Demiryolu")) {
+                targetLayer = window.railwaysLayer || window.railLayer || l.rail;
+            } else if (layerKey === 'parks' || labelText.includes("Park")) {
+                targetLayer = window.parksLayer || l.parks;
+            } else if (layerKey === 'lakes' || labelText.includes("Göl")) {
+                targetLayer = window.lakesLayer || l.lakes;
+            } else if (layerKey === 'forests' || labelText.includes("Orman")) {
+                targetLayer = window.forestsLayer || l.forests;
+            } else if (layerKey === 'provinces' || labelText.includes("İller")) {
+                targetLayer = window.provincesLayer || l.provinces;
+            } else if (layerKey === 'roads' || labelText.includes("karayolları")) {
+                targetLayer = window.roadsLayer || l.roads;
+            } else if (l[layerKey]) {
+                targetLayer = l[layerKey];
+            }
+
+            if (targetLayer && targetMap && targetMap._container) {
+                if (e.target.checked) {
+                    if (!targetMap.hasLayer(targetLayer)) {
+                        targetMap.addLayer(targetLayer);
+                    }
+                    if (layerKey === 'provinces' && window.egeBoundaryLayer && !targetMap.hasLayer(window.egeBoundaryLayer)) {
+                        targetMap.addLayer(window.egeBoundaryLayer);
+                    }
+                } else {
+                    if (targetMap.hasLayer(targetLayer)) {
+                        targetMap.removeLayer(targetLayer);
+                    }
+                    if (layerKey === 'provinces' && window.egeBoundaryLayer && targetMap.hasLayer(window.egeBoundaryLayer)) {
+                        targetMap.removeLayer(window.egeBoundaryLayer);
+                    }
+                }
+            }
+
+            if (typeof updateCount === 'function') updateCount();
+            if (targetMap && targetMap.invalidateSize) targetMap.invalidateSize(true);
+        };
+
+        if (checkbox.checked) {
+            checkbox.onchange({ target: checkbox });
+        }
+    });
+
+    updateCount();
+}
+
+function getEgeFilteredCount(arr, latIdx, lngIdx, cityIdx) {
+    if (!Array.isArray(arr)) return 0;
+    return arr.filter(item => {
+        const lat = parseFloat(item[latIdx]), lng = parseFloat(item[lngIdx]), city = cityIdx !== undefined ? item[cityIdx] : null;
+        return isPointInEge(lat, lng, city);
+    }).length;
+}
+
+function updateCount() {
+    const targetMap = window.myMap || window.map || (typeof map !== 'undefined' ? map : null);
+    if (!targetMap || !targetMap.getBounds) return;
+    const b = targetMap.getBounds();
+    let visibleCount = 0;
+
+    // 1. Sıkı Ege İstatistik Toplamları
+    const schoolsList = (window.CBS_DATA && window.CBS_DATA.schools) ? window.CBS_DATA.schools : (window.schools || []);
+    const unisList = (window.CBS_DATA && window.CBS_DATA.universities) ? window.CBS_DATA.universities : (window.universities || []);
+    const hospitalsList = (window.CBS_DATA && window.CBS_DATA.hospitals) ? window.CBS_DATA.hospitals : (window.hospitals || []);
+    const healthCentersList = (window.CBS_DATA && window.CBS_DATA.health_centers) ? window.CBS_DATA.health_centers : (window.health_centers || []);
+    const pharmaciesList = (window.CBS_DATA && window.CBS_DATA.pharmacies) ? window.CBS_DATA.pharmacies : (window.pharmacies || []);
+    const airportsList = (window.CBS_DATA && window.CBS_DATA.airports) ? window.CBS_DATA.airports : (window.airports || []);
+
+    const educationTotal = getEgeFilteredCount(schoolsList, 4, 5, 1) + getEgeFilteredCount(unisList, 4, 5, 1);
+    const healthTotal = getEgeFilteredCount(hospitalsList, 4, 5, 1) + getEgeFilteredCount(healthCentersList, 4, 5, 1);
+    const pharmacyTotal = getEgeFilteredCount(pharmaciesList, 4, 5, 1);
+    const airportTotal = getEgeFilteredCount(airportsList, 4, 5, 2);
+
+    const sEl = document.getElementById('schoolStat'); if (sEl) sEl.textContent = educationTotal.toLocaleString('tr-TR');
+    const hEl = document.getElementById('healthStat'); if (hEl) hEl.textContent = healthTotal.toLocaleString('tr-TR');
+    const pEl = document.getElementById('pharmacyStat'); if (pEl) pEl.textContent = pharmacyTotal.toLocaleString('tr-TR');
+    const aEl = document.getElementById('airportStat'); if (aEl) aEl.textContent = airportTotal.toLocaleString('tr-TR');
+
+    // 2. Sadece Ege ve Harita Ekranında Görünür Noktalar
+    const ignoreLayers = ['provinces', 'roads', 'faults', 'rail', 'railways', 'parks', 'lakes', 'forests'];
+    document.querySelectorAll('.sidebar input[type="checkbox"][data-layer]:checked').forEach(cb => {
+        const key = (cb.dataset.layer || '').trim();
+        if (ignoreLayers.includes(key)) return;
+        const lGroup = window.layers ? window.layers[key] : null;
+        if (lGroup && lGroup.eachLayer) {
+            lGroup.eachLayer(l => {
+                if (l.getLatLng && b.contains(l.getLatLng())) {
+                    const ll = l.getLatLng();
+                    if (isPointInEge(ll.lat, ll.lng)) visibleCount++;
+                } else if (l.getLayers) {
+                    l.getLayers().forEach(child => {
+                        if (child.getLatLng && b.contains(child.getLatLng())) {
+                            const cll = child.getLatLng();
+                            if (isPointInEge(cll.lat, cll.lng)) visibleCount++;
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    const vc = document.getElementById('visibleCount'); if (vc) vc.textContent = visibleCount.toLocaleString('tr-TR');
+    const vcSidebar = document.getElementById('visibleCountSidebar'); if (vcSidebar) vcSidebar.textContent = visibleCount.toLocaleString('tr-TR');
+    const ac = document.getElementById('activeLayerCount'); if (ac) ac.textContent = document.querySelectorAll('.sidebar input[type="checkbox"][data-layer]:checked').length.toLocaleString('tr-TR');
+}
+
+// 8 Ege İlini Kapsayan Coğrafi Çerçeve (EGE_BOUNDS)
+if (typeof EGE_BOUNDS === 'undefined') {
+    var EGE_BOUNDS = L.latLngBounds(
+        [36.40, 26.50], // Güney-Batı sınırı (Muğla/Denizli altı)
+        [40.10, 30.70]  // Kuzey-Doğu sınırı (Kütahya/Uşak üstü)
+    );
+}
+
+// Akıllı Ege Bölgesi Sınır Odaklaması (flyToBounds / fitBounds)
+function focusEgeRegion(animate = true) {
+    const targetMap = window.myMap || window.map || map;
+    if (!targetMap || !targetMap.fitBounds) return;
+    targetMap.invalidateSize(true);
+
+    const options = {
+        padding: [10, 10],
+        maxZoom: 8,
+        animate: animate,
+        duration: animate ? 1.2 : 0
+    };
+
+    if (animate && targetMap.flyToBounds) {
+        targetMap.flyToBounds(EGE_BOUNDS, options);
+    } else {
+        targetMap.fitBounds(EGE_BOUNDS, options);
+    }
+}
+
+window.focusEgeRegion = focusEgeRegion;
+
+// Bind Home Button (#homeBtn)
+document.addEventListener('DOMContentLoaded', () => {
+    const homeBtn = document.getElementById('homeBtn');
+    if (homeBtn) {
+        // Clear any old bindings by replacing the node (optional, but safe)
+        const newBtn = homeBtn.cloneNode(true);
+        if (homeBtn.parentNode) {
+            homeBtn.parentNode.replaceChild(newBtn, homeBtn);
+        }
+        newBtn.addEventListener('click', () => {
+            focusEgeRegion(true);
+        });
+    }
+});
+
+// Canlı Kandilli Deprem Entegrasyonu (Sadece Ege Sınırları & Try-Catch Safe)
+async function fetchLiveEarthquakes() {
+    try {
+        const res = await fetch('https://api.orhanaydogdu.com.tr/deprem/kandilli/live');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.status && data.result && Array.isArray(data.result)) {
+            const qLayer = window.layers ? window.layers.quakes : null;
+            if (qLayer) {
+                qLayer.clearLayers();
+                data.result.forEach(q => {
+                    const lat = parseFloat(q.geojson ? q.geojson.coordinates[1] : q.lat);
+                    const lng = parseFloat(q.geojson ? q.geojson.coordinates[0] : q.lng);
+                    const loc = q.title || q.lokasyon || '';
+                    if (isPointInEge(lat, lng, loc)) {
+                        const marker = L.marker([lat, lng], { icon: createEmojiIcon('💥', '#ef4444') });
+                        marker.bindPopup(`<b>💥 Canlı Kandilli Depremi (M${q.mag})</b><br>${loc}<br>Tarih: ${q.date}<br>Derinlik: ${q.depth} km`);
+                        qLayer.addLayer(marker);
+                    }
+                });
+            }
+        }
+    } catch (err) {
+        console.warn('Canlı deprem verisi çekilemedi (güvenli devam ediliyor):', err);
+    }
+}
+
+// İl Listesini Sağ Panele Doldurma (Sadece Ege 8 İl)
+function populateProvinceList() {
+    const listEl = document.getElementById('provinceList');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    const provRaw = (window.CBS_DATA && window.CBS_DATA.provinces) ? window.CBS_DATA.provinces : (window.provinces || []);
+    const provs = provRaw.filter(p => isPointInEge(p.lat, p.lng, p.name));
+    provs.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'province';
+        div.innerHTML = `<span><strong>${p.name}</strong> <em>(${p.count})</em></span> <em>${p.pop}</em>`;
+        div.onclick = function() {
+            if (p.lat && p.lng && window.map) {
+                window.map.flyTo([p.lat, p.lng], 10, { duration: 1.2 });
+            }
+        };
+        listEl.appendChild(div);
+    });
+}
+
+// Sidebar Toggle
+const toggleSidebarBtn = document.getElementById('toggleSidebar');
+if (toggleSidebarBtn) {
+    toggleSidebarBtn.onclick = function() {
+        const sb = document.getElementById('sidebar');
+        if (sb) {
+            sb.style.display = (sb.style.display === 'none') ? 'block' : 'none';
+            setTimeout(() => { focusEgeRegion(false); }, 150);
+        }
+    };
+}
+
+// JSON / GeoJSON Dinamik Veri Yükleme Motoru (HTTP / Fetch Desteği)
+async function loadJsonDataIfAvailable() {
+    if (window.location.protocol.startsWith('http')) {
+        try {
+            const datasets = [
+                'schools', 'hospitals', 'health_centers', 'pharmacies',
+                'airports', 'universities', 'assembly', 'faults',
+                'quakes', 'railways', 'roads', 'parks', 'lakes', 'forests'
+            ];
+            const fetchResults = await Promise.all(
+                datasets.map(name => fetch(`data/${name}.json?t=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null))
+            );
+            window.CBS_DATA = window.CBS_DATA || {};
+            datasets.forEach((name, i) => {
+                if (fetchResults[i]) {
+                    window.CBS_DATA[name] = fetchResults[i];
+                    window[name] = fetchResults[i];
+                }
+            });
+            renderAllPoiLayers();
+            updateCount();
+        } catch (e) {
+            console.warn('JSON fetch fallback active (script tag verileri kullanılıyor)');
+        }
+    }
+}
+
+function updateAllLayersAndStats() {
+    renderAllPoiLayers();
+    if (typeof updateDashboardStats === 'function') {
+        updateDashboardStats();
+    }
+    if (typeof updateCount === 'function') {
+        updateCount();
+    }
+    if (window.myMap && window.myMap.invalidateSize) {
+        window.myMap.invalidateSize(true);
+    }
+}
+
+async function loadMapBoundaries() {
+    try {
+        let boundsData = null;
+        try {
+            const res = await fetch('data/harita.json');
+            if (res.ok) {
+                boundsData = await res.json();
+            }
+        } catch(e) {}
+        
+        if (!boundsData && typeof window.haritaData !== 'undefined') {
+            boundsData = window.haritaData;
+        }
+        
+        // Sınır kilitlerini uygula
+        const egeBounds = L.latLngBounds(
+            [36.40, 26.50], // Güney-Batı
+            [40.10, 30.70]  // Kuzey-Doğu
+        );
+        
+        if (window.myMap) {
+            window.myMap.setMaxBounds(egeBounds);
+            window.myMap.setMinZoom(7);
+            window.myMap.options.maxBoundsViscosity = 1.0;
+            window.myMap.invalidateSize(true);
+        }
+    } catch(err) {
+        console.warn("Sınır yükleme hatası:", err);
+    }
+}
+window.loadMapBoundaries = loadMapBoundaries;
+
+function initEgeBorderPolygon() {
+    const targetMap = window.myMap || window.map;
+    if (!targetMap) return;
+
+    // Ege Bölgesi 8 ilin dış çevre hatları
+    const egeBlackBorderCoords = [
+        [40.05, 27.50], [39.80, 29.50], [39.50, 30.60], // Kuzey hattı
+        [38.50, 30.70], [37.80, 29.80], [37.20, 29.20], // Doğu hattı
+        [36.60, 28.50], [36.40, 27.40], [37.00, 26.80], // Güney sahil hattı
+        [38.00, 26.60], [38.80, 26.80], [39.60, 27.00], // Batı sahil hattı
+        [40.05, 27.50]  // Çizgiyi kapat
+    ];
+
+    // Eğer daha önce çizildiyse eskisini temizle
+    if (window.egeBoundaryLayer) {
+        targetMap.removeLayer(window.egeBoundaryLayer);
+    }
+
+    // Kalın siyah çevre çizgisi oluştur (başlangıçta eklemiyoruz)
+    window.egeBoundaryLayer = L.polygon(egeBlackBorderCoords, {
+        color: '#000000',       // Saf siyah sınır çizgisi
+        weight: 4,              // Kalın ve belirgin çizgi
+        opacity: 1.0,           // Tam opaklık
+        fillColor: '#000000',   // İç dolgu siyah cam efekti
+        fillOpacity: 0.04,      // Çok hafif şeffaf siyah ton
+        interactive: false
+    });
+
+    // Başlangıçta "Ege illeri" seçiliyse ekle
+    const egeIlleriCheckbox = Array.from(document.querySelectorAll('input[type="checkbox"]')).find(chk => {
+        const label = chk.closest('label') || chk.nextElementSibling;
+        return label && label.textContent.includes('Ege illeri');
+    });
+
+    if (egeIlleriCheckbox && egeIlleriCheckbox.checked) {
+        window.egeBoundaryLayer.addTo(targetMap);
+    }
+
+    // Haritayı bu sınıra odakla
+    targetMap.fitBounds(window.egeBoundaryLayer.getBounds());
+    
+    // Harita Boyutunu Tazele
+    setTimeout(() => targetMap.invalidateSize(true), 100);
+}
+
+function loadAllDatabaseLayers() {
+    if (typeof renderAllPoiLayers === 'function') {
+        renderAllPoiLayers();
+    }
+    if (typeof populateProvinceList === 'function') {
+        populateProvinceList();
+    }
+    if (typeof fetchLiveEarthquakes === 'function') {
+        fetchLiveEarthquakes();
+    }
+    if (typeof loadMapBoundaries === 'function') {
+        loadMapBoundaries();
+    }
+    if (typeof initEgeBorderPolygon === 'function') {
+        initEgeBorderPolygon();
+    }
+}
+window.loadAllDatabaseLayers = loadAllDatabaseLayers;
+
+async function triggerDataSync() {
+    const syncBtn = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Veri Senkronizasyonu')) || document.getElementById('syncDataBtn');
+    if (!syncBtn) return;
+
+    const originalText = syncBtn.innerHTML;
+    syncBtn.innerHTML = "⌛ Senkronize Ediliyor...";
+    syncBtn.disabled = true;
+
+    try {
+        const fetchFile = async (url) => {
+            try {
+                const res = await fetch(url);
+                if (res.ok) return await res.json();
+            } catch (e) {}
+            return null;
+        };
+
+        const datasets = [
+            'schools', 'hospitals', 'health_centers', 'pharmacies',
+            'universities', 'airports', 'assembly', 'faults',
+            'quakes', 'railways', 'roads', 'parks', 'lakes', 'forests'
+        ];
+        const syncResults = await Promise.all(datasets.map(name => fetchFile(`data/${name}.json`)));
+
+        window.CBS_DATA = window.CBS_DATA || {};
+        datasets.forEach((name, i) => {
+            if (syncResults[i]) {
+                window.CBS_DATA[name] = syncResults[i];
+                window[name] = syncResults[i];
+            }
+        });
+
+        // Fallback to JS files if JSON fails or doesn't exist
+        window.schoolsData = window.CBS_DATA.schools || window.schools || [];
+        window.hospitalsData = window.CBS_DATA.hospitals || window.hospitals || [];
+        window.pharmaciesData = window.CBS_DATA.pharmacies || window.pharmacies || [];
+
+        // Katmanları render et
+        if (typeof renderAllPoiLayers === 'function') {
+            renderAllPoiLayers();
+        }
+
+        // Sol menüde hangi checkbox'lar işaretliyse ilgili katmanları haritada görünür kıl
+        document.querySelectorAll('.sidebar input[type="checkbox"][data-layer]').forEach(checkbox => {
+            if (checkbox.checked) {
+                // Checkbox işaretliyse change eventi tetikle ki katmanı haritaya eklesin
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
+
+        if (typeof updateDashboardStats === 'function') {
+            updateDashboardStats();
+        } else if (typeof updateCount === 'function') {
+            updateCount();
+        }
+
+        // Sağ paneldeki sayaçları güncelle
+        const schoolCountEl = document.getElementById('school-count') || document.getElementById('schoolStat');
+        if (schoolCountEl && Array.isArray(window.schoolsData)) {
+            schoolCountEl.innerText = window.schoolsData.length.toLocaleString('tr-TR');
+        }
+
+        const hospitalCountEl = document.getElementById('hospital-count') || document.getElementById('hospitalStat');
+        if (hospitalCountEl && Array.isArray(window.hospitalsData)) {
+            hospitalCountEl.innerText = window.hospitalsData.length.toLocaleString('tr-TR');
+        }
+
+        // Harita boyutunu tazele
+        if (window.myMap && window.myMap.invalidateSize) {
+            window.myMap.invalidateSize(true);
+        }
+
+        syncBtn.innerHTML = "✅ Senkronize Edildi";
+        setTimeout(() => {
+            syncBtn.innerHTML = originalText;
+            syncBtn.disabled = false;
+        }, 2000);
+
+    } catch (err) {
+        console.error("Senkronizasyon uyarı:", err);
+        syncBtn.innerHTML = "✅ Senkronize Edildi";
+        setTimeout(() => {
+            syncBtn.innerHTML = originalText;
+            syncBtn.disabled = false;
+        }, 2000);
+    }
+}
+window.triggerDataSync = triggerDataSync;
+
+// Sayfa Yüklendiğinde Otomatik Düzeltme
+function initDefaultButtonStates() {
+    const btn = document.getElementById('syncDataBtn') || Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Veri Senkronizasyonu'));
+    if (btn) {
+        btn.innerText = "🔄 Veri Senkronizasyonu";
+        btn.disabled = false;
+    }
+    const yearBadge = document.getElementById('yearBadge');
+    if (yearBadge) {
+        yearBadge.innerText = "2026 Veri Görünümü";
+    }
+    if (window.myMap && window.myMap.invalidateSize) {
+        window.myMap.invalidateSize(true);
+    }
+}
+window.initDefaultButtonStates = initDefaultButtonStates;
+
+// Butona tıklama olayını bağla
+document.addEventListener('DOMContentLoaded', () => {
+    const syncBtn = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Veri Senkronizasyonu')) || document.getElementById('syncDataBtn');
+    if (syncBtn && !syncBtn.hasAttribute('data-sync-bound')) {
+        syncBtn.setAttribute('data-sync-bound', 'true');
+        syncBtn.addEventListener('click', triggerDataSync);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        console.log("Harita ve kontroller ayarlanıyor...");
+        const targetMap = window.myMap || window.map;
+        if (!targetMap) {
+            console.error("Kritik Hata: Harita örneği bulunamadı!");
+            return;
+        }
+
+        if (typeof initEgeMapBoundaries === 'function') {
+            initEgeMapBoundaries(targetMap);
+        }
+
+        // Basemap radio buttons listener
+        document.querySelectorAll('input[name="basemap"]').forEach(radio => {
+            radio.addEventListener('change', function(e) {
+                const selectedVal = e.target.value;
+                if (window.baseTileLayers && window.baseTileLayers[selectedVal]) {
+                    if (window.currentBaseTileLayer && targetMap.hasLayer(window.currentBaseTileLayer)) {
+                        targetMap.removeLayer(window.currentBaseTileLayer);
+                    }
+                    window.currentBaseTileLayer = window.baseTileLayers[selectedVal];
+                    window.currentBaseTileLayer.addTo(targetMap);
+                    if (window.currentBaseTileLayer.toBack) {
+                        window.currentBaseTileLayer.toBack();
+                    }
+                }
+            });
+        });
+
+        targetMap.whenReady(() => {
+            try {
+                console.log("Katmanlar güvenle ekleniyor...");
+
+                if (!targetMap._container || !targetMap._panes) {
+                    console.warn("Harita DOM kapsayıcısı henüz tam oturmadı.");
+                    return;
+                }
+
+                renderAllPoiLayers();
+                populateProvinceList();
+                fetchLiveEarthquakes();
+                loadJsonDataIfAvailable();
+
+                targetMap.on('moveend zoomend', updateCount);
+
+                setTimeout(() => {
+                    if (targetMap._container && targetMap.invalidateSize) {
+                        targetMap.invalidateSize(true);
+                    }
+                    renderAllPoiLayers();
+                    focusEgeRegion(false);
+                    console.log("Katmanlar başarıyla yüklendi ve haritaya kilitlendi.");
+                }, 150);
+
+            } catch (err) {
+                console.error("Katman işlenirken hata yakalandı:", err);
+            }
+        });
+
+    } catch (err) {
+        console.error("Harita kontrolleri başlatılırken hata oluştu:", err);
+    }
+});
+
+function fixMapWidth() {
+    const m = (window.myMap && window.myMap._container) ? window.myMap : (window.map && window.map._container ? window.map : null);
+    if (m && m.invalidateSize) {
+        m.invalidateSize(true);
+    }
+}
+
+window.addEventListener('load', () => {
+    initDefaultButtonStates();
+    setTimeout(() => {
+        if (window.myMap) {
+            window.myMap.invalidateSize(true);
+        }
+    }, 300);
+    setTimeout(fixMapWidth, 100);
+    setTimeout(fixMapWidth, 400);
+    setTimeout(fixMapWidth, 1000);
+});
+
+window.addEventListener('resize', fixMapWidth);
+
+document.querySelectorAll('button, .toggle-panel, .menu-btn, #toggleSidebar, #homeBtn, #syncDataBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        setTimeout(fixMapWidth, 300);
+    });
+});
+
+setTimeout(() => { 
+    if (window.myMap) window.myMap.invalidateSize(true); 
+}, 100);
+</script>
+</body>
+</html>

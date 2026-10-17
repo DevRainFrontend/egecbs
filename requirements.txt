@@ -1,0 +1,2 @@
+# İleride projeye dahil etmek istediğiniz harici kütüphaneleri buraya yazabilirsiniz.
+# Şimdilik server.py sadece dahili Python kütüphanelerini kullanıyor.
