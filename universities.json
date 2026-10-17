@@ -1,0 +1,274 @@
+[
+  [
+    "Ege Üniversitesi Bornova Kampüsü",
+    "İzmir",
+    "Bornova",
+    "Devlet Üniversitesi",
+    38.4592,
+    27.2285
+  ],
+  [
+    "Dokuz Eylül Üniversitesi Tınaztepe Kampüsü",
+    "İzmir",
+    "Buca",
+    "Devlet Üniversitesi",
+    38.3712,
+    27.1985
+  ],
+  [
+    "İzmir Yüksek Teknoloji Enstitüsü (İYTE)",
+    "İzmir",
+    "Urla",
+    "Devlet Üniversitesi",
+    38.3248,
+    26.6312
+  ],
+  [
+    "İzmir Katip Çelebi Üniversitesi",
+    "İzmir",
+    "Çiğli",
+    "Devlet Üniversitesi",
+    38.5142,
+    27.0215
+  ],
+  [
+    "İzmir Bakırçay Üniversitesi",
+    "İzmir",
+    "Menemen",
+    "Devlet Üniversitesi",
+    38.5982,
+    27.0185
+  ],
+  [
+    "İzmir Demokrasi Üniversitesi",
+    "İzmir",
+    "Karabağlar",
+    "Devlet Üniversitesi",
+    38.3912,
+    27.1042
+  ],
+  [
+    "Yaşar Üniversitesi Selçuk Yaşar Kampüsü",
+    "İzmir",
+    "Bornova",
+    "Vakıf Üniversitesi",
+    38.4521,
+    27.2015
+  ],
+  [
+    "İzmir Ekonomi Üniversitesi",
+    "İzmir",
+    "Balçova",
+    "Vakıf Üniversitesi",
+    38.3882,
+    27.0421
+  ],
+  [
+    "Manisa Celal Bayar Üniversitesi Şehzadeler Kampüsü",
+    "Manisa",
+    "Şehzadeler",
+    "Devlet Üniversitesi",
+    38.6142,
+    27.4215
+  ],
+  [
+    "MCBÜ Muradiye Kampüsü",
+    "Manisa",
+    "Yunusemre",
+    "Devlet Üniversitesi",
+    38.6785,
+    27.3082
+  ],
+  [
+    "MCBÜ Salihli Meslek Yüksekokulu",
+    "Manisa",
+    "Salihli",
+    "MYO",
+    38.4812,
+    28.1412
+  ],
+  [
+    "Aydın Adnan Menderes Üniversitesi Merkez Kampüs",
+    "Aydın",
+    "Efeler",
+    "Devlet Üniversitesi",
+    37.8542,
+    27.8512
+  ],
+  [
+    "ADÜ Nazilli İİBF Kampüsü",
+    "Aydın",
+    "Nazilli",
+    "Devlet Üniversitesi",
+    37.9185,
+    28.3282
+  ],
+  [
+    "ADÜ Söke İşletme Fakültesi",
+    "Aydın",
+    "Söke",
+    "Devlet Üniversitesi",
+    37.7482,
+    27.4112
+  ],
+  [
+    "ADÜ Kuşadası Turizm Fakültesi",
+    "Aydın",
+    "Kuşadası",
+    "Devlet Üniversitesi",
+    37.8742,
+    27.2782
+  ],
+  [
+    "Muğla Sıtkı Koçman Üniversitesi Kötekli Kampüsü",
+    "Muğla",
+    "Menteşe",
+    "Devlet Üniversitesi",
+    36.9658,
+    28.6882
+  ],
+  [
+    "MSKÜ Fethiye Kampüsü",
+    "Muğla",
+    "Fethiye",
+    "Devlet Üniversitesi",
+    36.6382,
+    29.1312
+  ],
+  [
+    "MSKÜ Bodrum Güzel Sanatlar Fakültesi",
+    "Muğla",
+    "Bodrum",
+    "Devlet Üniversitesi",
+    37.0412,
+    27.4282
+  ],
+  [
+    "Pamukkale Üniversitesi Kınıklı Kampüsü",
+    "Denizli",
+    "Pamukkale",
+    "Devlet Üniversitesi",
+    37.7404,
+    29.1016
+  ],
+  [
+    "PAÜ Tavas Meslek Yüksekokulu",
+    "Denizli",
+    "Tavas",
+    "MYO",
+    37.5691,
+    29.0554
+  ],
+  [
+    "PAÜ Çivril Atasay Kamer MYO",
+    "Denizli",
+    "Çivril",
+    "MYO",
+    38.2862,
+    29.7316
+  ],
+  [
+    "Uşak Üniversitesi Bir Eylül Kampüsü",
+    "Uşak",
+    "Merkez",
+    "Devlet Üniversitesi",
+    38.6812,
+    29.4112
+  ],
+  [
+    "Kütahya Dumlupınar Üniversitesi Evliya Çelebi Kampüsü",
+    "Kütahya",
+    "Merkez",
+    "Devlet Üniversitesi",
+    39.4882,
+    29.8982
+  ],
+  [
+    "Kütahya Sağlık Bilimleri Üniversitesi (KSBÜ)",
+    "Kütahya",
+    "Merkez",
+    "Devlet Üniversitesi",
+    39.4285,
+    29.9812
+  ],
+  [
+    "Afyon Kocatepe Üniversitesi Ahmet Necdet Sezer Kampüsü",
+    "Afyonkarahisar",
+    "Merkez",
+    "Devlet Üniversitesi",
+    38.814,
+    30.5336
+  ],
+  [
+    "Afyonkarahisar Sağlık Bilimleri Üniversitesi (AFSÜ)",
+    "Afyonkarahisar",
+    "Merkez",
+    "Devlet Üniversitesi",
+    38.7482,
+    30.5582
+  ],
+  [
+    "Uşak Üniversitesi Banaz Meslek Yüksekokulu",
+    "Uşak",
+    "Banaz",
+    "Devlet Üniversitesi",
+    38.7412,
+    29.7562
+  ],
+  [
+    "Uşak Üniversitesi Sağlık Yerleşkesi",
+    "Uşak",
+    "Merkez",
+    "Devlet Üniversitesi",
+    38.6754,
+    29.3985
+  ],
+  [
+    "DPÜ Simav Dr. İbrahim Naci Eren Yerleşkesi",
+    "Kütahya",
+    "Simav",
+    "Devlet Üniversitesi",
+    39.0915,
+    28.9742
+  ],
+  [
+    "DPÜ Tavşanlı Kampüsü",
+    "Kütahya",
+    "Tavşanlı",
+    "Devlet Üniversitesi",
+    39.5482,
+    29.4985
+  ],
+  [
+    "AKÜ Bolvadin Kırkgöz Kampüsü",
+    "Afyonkarahisar",
+    "Bolvadin",
+    "Devlet Üniversitesi",
+    38.7125,
+    31.0485
+  ],
+  [
+    "AKÜ Sandıklı Meslek Yüksekokulu",
+    "Afyonkarahisar",
+    "Sandıklı",
+    "Devlet Üniversitesi",
+    38.4685,
+    30.2741
+  ],
+  [
+    "İzmir Bakırçay Üniversitesi Seyrek Kampüsü",
+    "İzmir",
+    "Menemen",
+    "Devlet Üniversitesi",
+    38.5842,
+    27.0215
+  ],
+  [
+    "İzmir Katip Çelebi Üniversitesi Çiğli Ana Kampüsü",
+    "İzmir",
+    "Çiğli",
+    "Devlet Üniversitesi",
+    38.4985,
+    27.0512
+  ]
+]

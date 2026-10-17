@@ -1,0 +1,17 @@
+{
+  "region": "Ege Bölgesi",
+  "bounds": {
+    "southWest": [36.40, 26.50],
+    "northEast": [40.10, 30.70]
+  },
+  "provinces": [
+    {"id": 35, "name": "İzmir", "lat": 38.4192, "lng": 27.1287},
+    {"id": 45, "name": "Manisa", "lat": 38.6191, "lng": 27.4289},
+    {"id": 9, "name": "Aydın", "lat": 37.8444, "lng": 27.8458},
+    {"id": 48, "name": "Muğla", "lat": 37.2153, "lng": 28.3636},
+    {"id": 20, "name": "Denizli", "lat": 37.7765, "lng": 29.0864},
+    {"id": 64, "name": "Uşak", "lat": 38.6823, "lng": 29.4082},
+    {"id": 43, "name": "Kütahya", "lat": 39.4167, "lng": 29.9833},
+    {"id": 3, "name": "Afyonkarahisar", "lat": 38.7507, "lng": 30.5567}
+  ]
+}

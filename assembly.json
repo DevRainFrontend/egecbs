@@ -1,0 +1,362 @@
+[
+  [
+    "Gündoğdu Meydanı Toplanma Alanı",
+    "İzmir",
+    "Konak",
+    "Toplanma Alanı",
+    38.4342,
+    27.1382
+  ],
+  [
+    "Bornova Büyük Park",
+    "İzmir",
+    "Bornova",
+    "Toplanma Alanı",
+    38.4632,
+    27.2132
+  ],
+  [
+    "Buca Hasanağa Bahçesi",
+    "İzmir",
+    "Buca",
+    "Toplanma Alanı",
+    38.3862,
+    27.1712
+  ],
+  [
+    "Karşıyaka Bostanlı Pazaryeri",
+    "İzmir",
+    "Karşıyaka",
+    "Toplanma Alanı",
+    38.4512,
+    27.0942
+  ],
+  [
+    "Manisa Cumhuriyet Meydanı",
+    "Manisa",
+    "Şehzadeler",
+    "Toplanma Alanı",
+    38.6132,
+    27.4262
+  ],
+  [
+    "Akhisar Gölet Alanı",
+    "Manisa",
+    "Akhisar",
+    "Toplanma Alanı",
+    38.9182,
+    27.8212
+  ],
+  [
+    "Aydın Atatürk Kent Meydanı",
+    "Aydın",
+    "Efeler",
+    "Toplanma Alanı",
+    37.8442,
+    27.8412
+  ],
+  [
+    "Kuşadası İsmail Cem Dostluk Meydanı",
+    "Aydın",
+    "Kuşadası",
+    "Toplanma Alanı",
+    37.8612,
+    27.2582
+  ],
+  [
+    "Muğla Cumhuriyet Meydanı",
+    "Muğla",
+    "Menteşe",
+    "Toplanma Alanı",
+    37.2152,
+    28.3632
+  ],
+  [
+    "Fethiye Beşkaza Meydanı",
+    "Muğla",
+    "Fethiye",
+    "Toplanma Alanı",
+    36.6212,
+    29.1112
+  ],
+  [
+    "Denizli 15 Temmuz Delikliçınar Meydanı",
+    "Denizli",
+    "Merkezefendi",
+    "Toplanma Alanı",
+    37.7752,
+    29.0852
+  ],
+  [
+    "Denizli Çamlık Parkı",
+    "Denizli",
+    "Pamukkale",
+    "Toplanma Alanı",
+    37.7412,
+    29.0912
+  ],
+  [
+    "Uşak 15 Temmuz Özgürlük Meydanı",
+    "Uşak",
+    "Merkez",
+    "Toplanma Alanı",
+    38.6762,
+    29.4042
+  ],
+  [
+    "Kütahya Zafer Meydanı",
+    "Kütahya",
+    "Merkez",
+    "Toplanma Alanı",
+    39.4192,
+    29.9862
+  ],
+  [
+    "Afyonkarahisar Zafer Meydanı",
+    "Afyonkarahisar",
+    "Merkez",
+    "Toplanma Alanı",
+    38.7552,
+    30.5372
+  ],
+  [
+    "Akarçay Rekreasyon Alanı Afet Toplanma Alanı",
+    "Afyonkarahisar",
+    "Merkez",
+    "Toplanma Alanı",
+    38.7456,
+    30.5623
+  ],
+  [
+    "Anıtpark Zafer Meydanı",
+    "Afyonkarahisar",
+    "Merkez",
+    "Toplanma Alanı",
+    38.7562,
+    30.5385
+  ],
+  [
+    "Veysel Eroğlu Parkı Açık Alanı",
+    "Afyonkarahisar",
+    "Merkez",
+    "Toplanma Alanı",
+    38.7618,
+    30.5215
+  ],
+  [
+    "Sandıklı Şehir Stadyumu Çevresi Toplanma Alanı",
+    "Afyonkarahisar",
+    "Sandıklı",
+    "Toplanma Alanı",
+    38.4652,
+    30.2715
+  ],
+  [
+    "Kütahya Kent Parkı Toplanma Alanı",
+    "Kütahya",
+    "Merkez",
+    "Toplanma Alanı",
+    39.4215,
+    29.9885
+  ],
+  [
+    "Dumlupınar Stadyumu Meydanı",
+    "Kütahya",
+    "Merkez",
+    "Toplanma Alanı",
+    39.4182,
+    29.9765
+  ],
+  [
+    "Germiyan Kampüsü Açık Toplanma Alanı",
+    "Kütahya",
+    "Merkez",
+    "Toplanma Alanı",
+    39.4325,
+    29.9654
+  ],
+  [
+    "Tavşanlı Cumhuriyet Meydanı Toplanma Alanı",
+    "Kütahya",
+    "Tavşanlı",
+    "Toplanma Alanı",
+    39.5462,
+    29.4932
+  ],
+  [
+    "Atapark Meydanı ve Rekreasyon Alanı",
+    "Uşak",
+    "Merkez",
+    "Toplanma Alanı",
+    38.6785,
+    29.4065
+  ],
+  [
+    "Şekerevleri Parkı Afet Toplanma Alanı",
+    "Uşak",
+    "Merkez",
+    "Toplanma Alanı",
+    38.6652,
+    29.3951
+  ],
+  [
+    "Tiritoğlu Parkı Meydan Alanı",
+    "Uşak",
+    "Merkez",
+    "Toplanma Alanı",
+    38.6741,
+    29.4032
+  ],
+  [
+    "Banaz Belediye Parkı Toplanma Alanı",
+    "Uşak",
+    "Banaz",
+    "Toplanma Alanı",
+    38.7415,
+    29.7582
+  ],
+  [
+    "Manisa Fuar Alanı Açık Toplanma Alanı",
+    "Manisa",
+    "Şehzadeler",
+    "Toplanma Alanı",
+    38.6185,
+    27.4325
+  ],
+  [
+    "Laleli Pazar Yeri ve Park Alanı",
+    "Manisa",
+    "Yunusemre",
+    "Toplanma Alanı",
+    38.6254,
+    27.3985
+  ],
+  [
+    "Akhisar Milli Egemenlik Meydanı",
+    "Manisa",
+    "Akhisar",
+    "Toplanma Alanı",
+    38.9215,
+    27.8385
+  ],
+  [
+    "Turgutlu 15 Temmuz Demokrasi Meydanı",
+    "Manisa",
+    "Turgutlu",
+    "Toplanma Alanı",
+    38.4985,
+    27.7025
+  ],
+  [
+    "Mimar Sinan Parkı Açık Alanı",
+    "Aydın",
+    "Efeler",
+    "Toplanma Alanı",
+    37.8542,
+    27.8351
+  ],
+  [
+    "Kemer Pazaryeri Açık Toplanma Alanı",
+    "Aydın",
+    "Efeler",
+    "Toplanma Alanı",
+    37.8615,
+    27.8482
+  ],
+  [
+    "Nazilli İstasyon Meydanı Toplanma Alanı",
+    "Aydın",
+    "Nazilli",
+    "Toplanma Alanı",
+    37.9142,
+    28.3215
+  ],
+  [
+    "Söke Cumhuriyet Meydanı Toplanma Alanı",
+    "Aydın",
+    "Söke",
+    "Toplanma Alanı",
+    37.7512,
+    27.4085
+  ],
+  [
+    "Adalet Parkı Afet Toplanma Alanı",
+    "Denizli",
+    "Merkezefendi",
+    "Toplanma Alanı",
+    37.7712,
+    29.0625
+  ],
+  [
+    "Çamlık Parkı Açık Alanı",
+    "Denizli",
+    "Pamukkale",
+    "Toplanma Alanı",
+    37.7465,
+    29.0982
+  ],
+  [
+    "Bağbaşı Kent Ormanı Girişi Meydanı",
+    "Denizli",
+    "Pamukkale",
+    "Toplanma Alanı",
+    37.7325,
+    29.1245
+  ],
+  [
+    "Sümerpark Açık Toplanma Alanı",
+    "Denizli",
+    "Merkezefendi",
+    "Toplanma Alanı",
+    37.7915,
+    29.0812
+  ],
+  [
+    "Muğla Sosyo-Kültürel Alan Açık Parkı",
+    "Muğla",
+    "Menteşe",
+    "Toplanma Alanı",
+    37.2142,
+    28.3625
+  ],
+  [
+    "Düğerek Spor Tesisleri Açık Alanı",
+    "Muğla",
+    "Menteşe",
+    "Toplanma Alanı",
+    37.1985,
+    28.3792
+  ],
+  [
+    "Bodrum İskele Meydanı ve Barış Parkı",
+    "Muğla",
+    "Bodrum",
+    "Toplanma Alanı",
+    37.0345,
+    27.4285
+  ],
+  [
+    "Kültürpark Fuar Açık Toplanma Alanı",
+    "İzmir",
+    "Konak",
+    "Toplanma Alanı",
+    38.4285,
+    27.1425
+  ],
+  [
+    "Bayraklı SMG Parkı Toplanma Alanı",
+    "İzmir",
+    "Bayraklı",
+    "Toplanma Alanı",
+    38.4612,
+    27.1685
+  ],
+  [
+    "Karşıyaka Anayasa Meydanı",
+    "İzmir",
+    "Karşıyaka",
+    "Toplanma Alanı",
+    38.4552,
+    27.1115
+  ]
+]
